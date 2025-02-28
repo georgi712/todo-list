@@ -1,7 +1,22 @@
+import { useEffect, useState } from "react";
 import TodoListItem from "./TodoListItem.jsx";
 
 
 export default function TodoList() {
+    const [todos, setTodos] = useState([]);
+    const [isPending, setIsPending] = useState(true);
+
+    useEffect(() => {
+        fetch('http://localhost:3030/jsonstore/todos')
+            .then(res => res.json())
+            .then(data => {
+                const result = Object.values(data);
+                setTodos(result);
+                setIsPending(false);
+            })
+            .catch(err => message);
+    }, []);
+
     return (
         <section className="todo-list-container">
       <h1>Todo List</h1>
@@ -13,11 +28,13 @@ export default function TodoList() {
       <div className="table-wrapper">
 
         {/* <!-- Loading spinner - show the load spinner when fetching the data from the server--> */}
-        {/* <div className="loading-container">
+        {isPending && 
+        <div className="loading-container">
           <div className="loading-spinner">
             <span className="loading-spinner-text">Loading</span>
           </div>
-        </div> */}
+        </div>}
+        
 
         {/* <!-- Todo list table --> */}
         <table className="table">
@@ -30,11 +47,12 @@ export default function TodoList() {
           </thead>
           <tbody>
 
-            {/* <!-- Todo item --> */}
-            <TodoListItem />
-            <TodoListItem />
-            <TodoListItem />
-            <TodoListItem />
+            {todos.map(todo => <TodoListItem 
+            key={todo._id} 
+            text={todo.text} 
+            isCompleted={todo.isCompleted}
+            />
+        )}
 
           </tbody>
         </table>
