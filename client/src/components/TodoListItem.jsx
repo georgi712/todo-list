@@ -2,7 +2,9 @@ import styles from './TodoListItem.module.css'
 
 export default function TodoListItem({
     text, 
-    isCompleted
+    _id,
+    isCompleted,
+    onStatusChange
 }) {
     const todoClassNames = [styles['todo']];
 
@@ -14,7 +16,7 @@ export default function TodoListItem({
               <td>{text}</td>
               <td>{isCompleted ? 'Complete' : 'Incomplete'}</td>
               <td className="todo-action">
-                <button className="btn todo-btn">Change status</button>
+                <button onClick={() => onStatusChange(_id)} className="btn todo-btn">Change status</button>
               </td>
             </tr>
     )
